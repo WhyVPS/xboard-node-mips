@@ -65,9 +65,9 @@ done
 step "下载 xboard-node 二进制 -> $BIN"
 mkdir -p /tmp
 if [ ! -x "$BIN" ]; then
-    curl -fsSL "$DL_URL" -o "$PKG" || { echo "ERROR: 二进制下载失败 $DL_URL" >&2; exit 1; }
-    ( gunzip -c "$PKG" > "$BIN" 2>/dev/null && chmod +x "$BIN" ) || { echo "ERROR: 解压失败" >&2; exit 1; }
-    rm -f "$PKG"
+    # 流式解压: 压缩包不落盘, 只占用最终二进制 ~70MB, 对 128MB 的 /tmp 更稳
+    curl -fsSL "$DL_URL" | gunzip -c > "$BIN" 2>/dev/null && chmod +x "$BIN" \
+        || { echo "ERROR: 二进制下载/解压失败 $DL_URL" >&2; rm -f "$BIN"; exit 1; }
 fi
 [ -x "$BIN" ] && echo "  二进制就绪: $("$BIN" -v 2>/dev/null | head -1 || echo ok)"
 
@@ -221,10 +221,8 @@ ensure_binary() {
     [ -x "$BIN" ] && return 0
     echo "xboard-node: 下载二进制..."
     mkdir -p /tmp
-    curl -fsSL "$DL_URL" -o "$PKG" || return 1
-    gunzip -c "$PKG" > "$BIN" 2>/dev/null || { rm -f "$PKG"; return 1; }
-    rm -f "$PKG"
-    chmod +x "$BIN"
+    # 流式解压, 压缩包不落盘, 控制 /tmp 占用
+    curl -fsSL "$DL_URL" | gunzip -c > "$BIN" 2>/dev/null && chmod +x "$BIN"
     return 0
 }
 
