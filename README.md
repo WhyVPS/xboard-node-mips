@@ -11,15 +11,24 @@ xboard-node 的 MIPS (mipsel) 交叉编译版 + **一键批量安装脚本**，�
 
 ## 一键安装
 
-每台路由器执行以下命令，把 `PANEL_URL` / `MACHINE_TOKEN` / `MACHINE_ID` 换成对应值：
+每台路由器执行以下命令，把 `PANEL_URL` / `MACHINE_TOKEN` / `MACHINE_ID` 换成对应值。
+
+**（1）+ CF DNS 自动更新（完整推荐，含 Cloudflare DNS）**：
 
 ```sh
 curl -sL https://raw.githubusercontent.com/WhyVPS/xboard-node-mips/main/install.sh \
-  | PANEL_URL=https://tvoo.eu.cc \
-    MACHINE_TOKEN=<你的机器token> \
-    MACHINE_ID=<你的机器id> \
-    sh
+  | PANEL_URL=https://tvoo.eu.cc MACHINE_TOKEN=<机器token> MACHINE_ID=<机器id> \
+    CF_API_TOKEN=<cf_token> CF_ZONE_ID=<zone_id> CF_PARENT_DOMAIN=imis.eu.cc sh
 ```
+
+**（2）仅 xboard-node（不配 CF DNS）**：
+
+```sh
+curl -sL https://raw.githubusercontent.com/WhyVPS/xboard-node-mips/main/install.sh \
+  | PANEL_URL=https://tvoo.eu.cc MACHINE_TOKEN=<机器token> MACHINE_ID=<机器id> sh
+```
+
+> 命令是两行，中间的 `\` 是换行连接符；实际执行时把整段（含 `| ... sh`）一起复制运行。
 
 ### 环境变量
 
