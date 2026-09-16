@@ -81,3 +81,13 @@ go build -ldflags "-s -w" \
 
 - `/tmp` 为 tmpfs，设备重启后二进制清空，开机自动重新下载（见 init 脚本 `ensure_binary`）。
 - 本仓库公开：**请勿提交任何真实 token / 密钥**。
+
+---
+
+## 更新日志
+
+见 [CHANGELOG.md](CHANGELOG.md)。
+
+- **当前 Release**：`v1.0.0-mips`（2026-09-04），含全架构二进制（`xboard-node-linux-<arch>.gz`）+ `xboard-node_1.0.0-1_*.ipk`。
+- **二进制升级**：设备开机自动拉取 Release 最新版，无需手动下发。
+- **说明**：本仓库公开，请勿提交任何真实 token / 密钥。
