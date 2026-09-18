@@ -91,4 +91,24 @@ go build -ldflags "-s -w" \
 - **当前 Release**：`v1.0.0-mips`（2026-09-04），含全架构二进制（`xboard-node-linux-<arch>.gz`）+ `xboard-node_1.0.0-1_*.ipk`。
 - **二进制升级**：设备开机自动拉取 Release 最新版，无需手动下发。
 - **说明**：本仓库公开，请勿提交任何真实 token / 密钥。
+适合你其他同系路由(iStoreOS/OpenWrt/ImmortalWrt)的**一键关闭命令**,整行复制粘贴即可:
+
+```sh
+uci -q set system.@system[0].log_enable='0'; uci -q commit system; /etc/init.d/log stop 2>/dev/null; /etc/init.d/log disable 2>/dev/null; killall logd 2>/dev/null; > /var/log/wtmp; > /var/log/lastlog; dmesg -c 2>/dev/null; echo '已关闭:系统日志+登录记录+连接记录'
+```
+
+一行搞定:
+- **系统日志**:`log_enable=0` + 停 logd + 开机不再自启
+- **登录/连接记录**:清空 `wtmp`/`lastlog`,清除内核 `dmesg` 缓冲
+- 重启后依然保持关闭
+
+**恢复命令**(需要时):
+
+```sh
 uci -q set system.@system[0].log_enable='1'; uci -q commit system; /etc/init.d/log enable; /etc/init.d/log start; echo '已恢复'
+```
+
+注意:
+- 兼容 OpenWrt 21/23、ImmortalWrt、iStoreOS;老版本若在 `/etc/config/log` 里有 `logd`,可在第一条前加 `uci -q set log.@logd[0].log_enable='0'`
+- 关闭后该路由器将**没有**任何被入侵记录可查,恢复时也不会找回已清内容
+- 内核 conntrack 表(上网必需)不会被关,但它只是内存状态、非文字记录、重启即清空
