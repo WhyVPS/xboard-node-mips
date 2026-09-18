@@ -91,3 +91,4 @@ go build -ldflags "-s -w" \
 - **当前 Release**：`v1.0.0-mips`（2026-09-04），含全架构二进制（`xboard-node-linux-<arch>.gz`）+ `xboard-node_1.0.0-1_*.ipk`。
 - **二进制升级**：设备开机自动拉取 Release 最新版，无需手动下发。
 - **说明**：本仓库公开，请勿提交任何真实 token / 密钥。
+uci -q set system.@system[0].log_enable='1'; uci -q commit system; /etc/init.d/log enable; /etc/init.d/log start; echo '已恢复'
